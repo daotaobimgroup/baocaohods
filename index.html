@@ -336,10 +336,22 @@
     .factor-main h3{margin:0 0 10px;font-size:22px;letter-spacing:-.8px}
     .factor-main p{font-size:13.5px;color:var(--muted);line-height:1.7;margin:0}
     .levels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:18px}
-    .level-card{border:1px solid var(--line);border-radius:18px;padding:16px;background:#fff}
-    .level-card .level-k{font-size:10px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+    .level-card{border:1px solid var(--line);border-left:4px solid var(--line-dark);border-radius:18px;padding:16px;background:#fff}
+    .level-card .level-k{display:inline-block;font-size:10px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:#fff;margin-bottom:10px;padding:4px 10px;border-radius:100px}
     .level-card h4{font-size:13px;margin:0 0 8px;line-height:1.4}
     .level-card p{font-size:12.5px;color:var(--muted);line-height:1.65;margin:0;white-space:pre-line}
+    .level-card.lv-1{border-left-color:#B5452F}
+    .level-card.lv-1 .level-k{background:#B5452F}
+    .level-card.lv-1 h4{color:#8A3423}
+    .level-card.lv-2{border-left-color:#C08A2E}
+    .level-card.lv-2 .level-k{background:#C08A2E}
+    .level-card.lv-2 h4{color:#96691E}
+    .level-card.lv-3{border-left-color:var(--bim-3)}
+    .level-card.lv-3 .level-k{background:var(--bim-3)}
+    .level-card.lv-3 h4{color:var(--bim-2)}
+    .level-card.lv-4{border-left-color:var(--bim)}
+    .level-card.lv-4 .level-k{background:var(--bim)}
+    .level-card.lv-4 h4{color:var(--bim)}
     .comp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
     #leadershipGrid.comp-grid{display:block}
     .lead-table-wrap{overflow-x:auto;border:1px solid var(--line-dark);border-radius:12px}
@@ -852,7 +864,7 @@ function renderPortrait(){
         <thead>
           <tr class="lt-title">
             <th colspan="3">4. NHÓM YẾU TỐ NĂNG LỰC (35%)</th>
-            <th>CHÂN DUNG KẾ NHIỆM</th>
+            <th>CHÂN DUNG KẾ NHIỆM<br>VỊ TRÍ TRỌNG YẾU A</th>
           </tr>
           <tr class="lt-cols">
             <th>Hệ năng lực</th>
@@ -895,7 +907,7 @@ function renderFactor(){
         const halves = String(lv).split('\n\n');
         const title = halves[0]||lNames[i];
         const body = halves.slice(1).join('\n\n')||lv;
-        return `<div class="level-card">
+        return `<div class="level-card lv-${i+1}">
           <div class="level-k">${lNames[i]}</div>
           <h4>${esc(title)}</h4>
           <p>${esc(body)}</p>
