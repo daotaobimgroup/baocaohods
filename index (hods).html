@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BIM Future Leaders 2026 — Executive Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#071B15;
+      --ink-2:#0F2B22;
+      --bim:#004833;
+      --bim-2:#006647;
+      --bim-3:#0C7A54;
+      --mint:#EAF4EF;
+      --mint-2:#D7EBE2;
+      --paper:#F5F2EC;
+      --paper-2:#FBFAF7;
+      --white:#FFFFFF;
+      --line:#E2DED4;
+      --line-dark:#CFC6B8;
+      --gold:#B99552;
+      --gold-2:#D8BF7A;
+      --gold-soft:#F6EDD7;
+      --amber:#C46D22;
+      --red:#A83A32;
+      --blue:#305A8C;
+      --muted:#697A73;
+      --muted-2:#8D9C96;
+      --shadow:0 22px 70px rgba(7, 27, 21, .10);
+      --shadow-sm:0 8px 28px rgba(7, 27, 21, .08);
+      --radius:24px;
+      --radius-sm:14px;
+      --side:308px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:"Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+      background:
+        radial-gradient(circle at 88% 4%, rgba(185,149,82,.18), transparent 30%),
+        linear-gradient(135deg, #f8f6f0 0%, #f1eee5 48%, #f6f4ee 100%);
+      color:var(--ink);
+      min-height:100vh;
+      overflow:hidden;
+    }
+    button,input,select{font:inherit}
+    .app{display:grid;grid-template-columns:var(--side) minmax(0,1fr);height:100vh}
+    .sidebar{
+      position:relative;
+      background:
+        radial-gradient(circle at 22% 7%, rgba(216,191,122,.24), transparent 28%),
+        linear-gradient(180deg, #09241C 0%, #051712 100%);
+      color:#fff;
+      padding:28px 22px;
+      overflow:hidden;
+      box-shadow:16px 0 60px rgba(7,27,21,.18);
+    }
+    .sidebar:before{
+      content:"";
+      position:absolute;inset:0;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size:46px 46px;
+      mask-image:linear-gradient(180deg, rgba(0,0,0,.65), transparent 78%);
+      pointer-events:none;
+    }
+    .brand{position:relative;z-index:1;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,.10)}
+    .brand-logo{display:flex;align-items:flex-end;gap:5px;margin-bottom:16px}
+    .brand-logo strong{font-size:34px;letter-spacing:-1.8px;line-height:.9}
+    .brand-logo span{font-size:22px;font-weight:500;color:rgba(255,255,255,.70);line-height:1}
+    .gold-line{width:42px;height:3px;border-radius:100px;background:linear-gradient(90deg,var(--gold-2), rgba(216,191,122,.20));margin:10px 0 14px}
+    .brand-kicker{font-size:10px;font-weight:800;letter-spacing:2.4px;text-transform:uppercase;color:rgba(255,255,255,.42);margin-bottom:9px}
+    .brand-title{font-size:18px;font-weight:800;line-height:1.22;letter-spacing:-.3px}
+    .brand-caption{font-size:12px;line-height:1.55;color:rgba(255,255,255,.58);margin-top:10px}
+    .confidential{
+      margin-top:18px;display:inline-flex;align-items:center;gap:8px;
+      color:#FFE6A6;background:rgba(185,149,82,.11);border:1px solid rgba(216,191,122,.25);
+      border-radius:999px;padding:8px 11px;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase
+    }
+    .nav{position:relative;z-index:1;margin-top:24px;display:flex;flex-direction:column;gap:8px}
+    .nav-label{font-size:10px;text-transform:uppercase;letter-spacing:1.9px;color:rgba(255,255,255,.33);font-weight:900;margin:0 0 7px 6px}
+    .nav button{
+      display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:15px;background:transparent;
+      color:rgba(255,255,255,.67);padding:13px 14px;text-align:left;cursor:pointer;
+      transition:.18s ease;position:relative
+    }
+    .nav button:hover{background:rgba(255,255,255,.07);color:#fff;transform:translateX(2px)}
+    .nav button.active{background:rgba(255,255,255,.12);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
+    .nav button.active:before{
+      content:"";position:absolute;left:-2px;top:13px;bottom:13px;width:3px;background:var(--gold-2);border-radius:100px
+    }
+    .nav .num{
+      width:28px;height:28px;border-radius:10px;display:grid;place-items:center;flex:0 0 auto;
+      background:rgba(255,255,255,.08);font-weight:900;font-size:12px;color:rgba(255,255,255,.78)
+    }
+    .nav button.active .num{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#102218}
+    .nav .copy{min-width:0}
+    .nav .copy b{display:block;font-size:13px;letter-spacing:-.1px}
+    .nav .copy span{display:block;font-size:11px;color:rgba(255,255,255,.43);margin-top:2px}
+    .side-footer{position:absolute;left:22px;right:22px;bottom:18px;color:rgba(255,255,255,.35);font-size:11px;line-height:1.5;z-index:1}
+    .main{height:100vh;overflow:auto;padding:28px clamp(22px,3vw,44px) 54px}
+    .page{display:none;animation:fade .22s ease}
+    .page.active{display:block}
+    @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:22px}
+    .eyebrow{font-size:11px;font-weight:900;letter-spacing:2.2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+    h1{font-size:clamp(28px,3.2vw,47px);letter-spacing:-1.8px;line-height:1.02;margin:0}
+    h1 em{font-style:normal;color:var(--bim-2)}
+    .subtitle{max-width:780px;color:var(--muted);font-size:14px;line-height:1.7;margin-top:12px}
+    .asof{
+      flex:0 0 auto;background:rgba(255,255,255,.72);border:1px solid rgba(226,222,212,.9);
+      border-radius:18px;padding:12px 15px;box-shadow:var(--shadow-sm);backdrop-filter:blur(12px)
+    }
+    .asof span{display:block;font-size:10px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted)}
+    .asof b{display:block;font-size:18px;margin-top:4px}
+    .section{background:rgba(255,255,255,.78);border:1px solid rgba(226,222,212,.95);border-radius:var(--radius);box-shadow:var(--shadow-sm);margin-bottom:22px;overflow:hidden}
+    .section-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:21px 24px;border-bottom:1px solid var(--line);background:rgba(251,250,247,.72)}
+    .section-title{display:flex;align-items:center;gap:13px;font-size:14px;font-weight:900;text-transform:uppercase;letter-spacing:1.15px}
+    .section-title:before{content:"";width:4px;height:18px;border-radius:99px;background:linear-gradient(var(--bim-2),var(--gold))}
+    .section-sub{font-size:12px;color:var(--muted);margin-top:3px;text-transform:none;letter-spacing:0;font-weight:500}
+    .section-body{padding:24px}
+    .filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    .filter-btn,.filter-input,.filter-select{
+      border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 13px;color:var(--ink);font-size:12.5px;outline:none
+    }
+    .filter-btn{cursor:pointer;font-weight:800;color:var(--muted);transition:.16s}
+    .filter-btn:hover,.filter-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .filter-input{min-width:260px;border-radius:14px}
+    .filter-select{border-radius:14px}
+    table{width:100%;border-collapse:separate;border-spacing:0}
+    th{
+      position:sticky;top:0;background:#F7F4EE;color:#66736E;font-size:10.5px;font-weight:900;letter-spacing:1.1px;
+      text-transform:uppercase;text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);z-index:1
+    }
+    td{padding:15px 14px;border-bottom:1px solid #ECE7DD;vertical-align:top;font-size:13px;line-height:1.55}
+    tbody tr:hover td{background:#FBFAF7}
+    .table-wrap{max-height:610px;overflow:auto}
+    .status,.tag{display:inline-flex;align-items:center;gap:7px;border-radius:999px;font-size:11.5px;font-weight:850;padding:5px 9px;white-space:nowrap}
+    .st-done{background:#E5F3EC;color:#006647;border:1px solid #B9DDCB}
+    .st-run{background:#FFF0D5;color:#8D5D00;border:1px solid #E7C472}
+    .st-todo{background:#F0EEE8;color:#6D675F;border:1px solid #DDD7CA}
+    .tag-priority{background:#FFF4CE;color:#7A5600;border:1px solid #E5C66E}
+    .tag-consider{background:#FFF;color:var(--ink);border:1px solid var(--line-dark);border-radius:12px;font-weight:750;white-space:normal;line-height:1.45;padding:8px 10px}
+    .tag-approved{background:#E8F4EF;color:var(--bim-2);border:1px solid #BBDCCE}
+    .tiny-bar{width:100%;min-width:90px;height:8px;background:#E8E3D8;border-radius:999px;overflow:hidden;margin-top:7px}
+    .tiny-bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--bim-2),var(--gold));width:0}
+
+    /* ============ TAB 1: TIẾN ĐỘ – TIMELINE TỔNG QUAN ============ */
+    .progress-overview { margin-bottom: 28px; }
+    .giai-doan-block { margin-bottom: 28px; }
+    .giai-doan-header {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 16px;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, #09241C 0%, #0B3326 100%);
+      border-radius: 18px; color: #fff; position: relative; overflow: hidden;
+    }
+    .giai-doan-header:before {
+      content: ""; position: absolute; right: -60px; top: -60px;
+      width: 180px; height: 180px; border-radius: 50%;
+      border: 1px solid rgba(216,191,122,.2); pointer-events: none;
+    }
+    .giai-doan-label {
+      font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold-2); margin-bottom: 4px;
+    }
+    .giai-doan-title { font-size: 16px; font-weight: 800; }
+    .giai-doan-pct {
+      margin-left: auto; display: flex; align-items: center; gap: 12px;
+    }
+    .gd-pct-num { font-size: 32px; font-weight: 900; letter-spacing: -1.5px; line-height: 1; }
+    .gd-pct-bar { width: 120px; }
+    .gd-bar-bg { height: 8px; background: rgba(255,255,255,.15); border-radius: 99px; overflow: hidden; }
+    .gd-bar-fg { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--gold), var(--gold-2)); }
+
+    /* Horizontal timeline with circular nodes */
+    .changs-timeline { display: flex; align-items: flex-start; gap: 0; position: relative; }
+    .changs-timeline:before {
+      content: ""; position: absolute; top: 28px; left: 44px; right: 44px; height: 2px;
+      background: linear-gradient(90deg, var(--line-dark), var(--line));
+      z-index: 0;
+    }
+    .chang-node { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0; position: relative; z-index: 1; cursor: pointer; }
+    .chang-circle {
+      width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
+      border: 3px solid var(--line-dark); background: #fff;
+      font-weight: 900; font-size: 13px; transition: .2s ease;
+      position: relative; box-shadow: 0 4px 14px rgba(0,0,0,.08);
+    }
+    .chang-circle.done { background: linear-gradient(135deg, var(--bim-2), var(--bim-3)); border-color: var(--bim-2); color: #fff; }
+    .chang-circle.running { background: linear-gradient(135deg, #F6EDD7, #EBD89E); border-color: var(--gold); color: var(--bim); }
+    .chang-circle.todo { background: #F5F2EC; border-color: var(--line-dark); color: var(--muted); }
+    .chang-circle.active-node { box-shadow: 0 0 0 6px rgba(0,102,71,.18); transform: scale(1.08); }
+    .chang-pct-ring {
+      position: absolute; inset: -5px; border-radius: 50%;
+      background: conic-gradient(var(--bim-2) calc(var(--p,0)*1%), transparent 0);
+      opacity: .25; pointer-events: none;
+    }
+    .chang-label { margin-top: 10px; text-align: center; }
+    .chang-label b { display: block; font-size: 12px; font-weight: 900; letter-spacing: -.2px; }
+    .chang-label span { display: block; font-size: 10.5px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+    .chang-label .pct-badge {
+      display: inline-block; margin-top: 5px; padding: 3px 8px;
+      border-radius: 999px; font-size: 10px; font-weight: 900; letter-spacing: .5px;
+    }
+    .pct-done { background: #E5F3EC; color: var(--bim-2); border: 1px solid #B9DDCB; }
+    .pct-run { background: #FFF0D5; color: #8D5D00; border: 1px solid #E7C472; }
+    .pct-todo { background: #F0EEE8; color: var(--muted); border: 1px solid var(--line-dark); }
+
+    /* Detail panel that appears inline */
+    .chang-detail-panel {
+      background: rgba(255,255,255,.9); border: 1px solid var(--line-dark);
+      border-radius: 20px; margin-top: 20px; overflow: hidden;
+      box-shadow: var(--shadow-sm); animation: fade .2s ease;
+      display: none;
+    }
+    .chang-detail-panel.open { display: block; }
+    .cdp-head {
+      display: flex; align-items: center; gap: 14px; padding: 16px 20px;
+      background: linear-gradient(135deg, rgba(0,72,51,.06), rgba(0,102,71,.04));
+      border-bottom: 1px solid var(--line);
+    }
+    .cdp-head .icon {
+      width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center;
+      background: var(--bim); color: #fff; font-weight: 900; font-size: 14px; flex: 0 0 auto;
+    }
+    .cdp-head h3 { margin: 0; font-size: 16px; letter-spacing: -.4px; }
+    .cdp-head p { margin: 4px 0 0; font-size: 12px; color: var(--muted); }
+    .cdp-table { width: 100%; border-collapse: collapse; }
+    .cdp-table th {
+      background: #F7F4EE; color: var(--muted); font-size: 10.5px; font-weight: 900;
+      letter-spacing: 1px; text-transform: uppercase; padding: 10px 14px;
+      text-align: left; border-bottom: 1px solid var(--line);
+    }
+    .cdp-table td { padding: 13px 14px; border-bottom: 1px solid #ECE7DD; font-size: 13px; vertical-align: top; }
+    .cdp-table tbody tr:last-child td { border-bottom: 0; }
+    .cdp-table tbody tr:hover td { background: #FBFAF7; }
+
+    /* ============ TAB VTTY ============ */
+    .division-accordion { display: flex; flex-direction: column; gap: 10px; }
+    .div-acc-item { border: 1px solid var(--line); border-radius: 18px; background: #fff; overflow: hidden; transition: .18s; }
+    .div-acc-trigger {
+      display: flex; align-items: center; gap: 14px; width: 100%;
+      padding: 16px 18px; background: transparent; border: 0;
+      cursor: pointer; text-align: left; transition: .18s;
+    }
+    .div-acc-trigger:hover { background: var(--mint); }
+    .div-acc-trigger.open { background: linear-gradient(135deg, rgba(0,72,51,.06), rgba(0,102,71,.03)); }
+    .div-acc-num {
+      width: 38px; height: 38px; border-radius: 12px; background: var(--bim);
+      color: #fff; display: grid; place-items: center; font-weight: 900; font-size: 15px; flex: 0 0 auto;
+    }
+    .div-acc-info { flex: 1; min-width: 0; }
+    .div-acc-info b { display: block; font-size: 14px; letter-spacing: -.2px; }
+    .div-acc-info span { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .div-acc-chevron {
+      width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line);
+      display: grid; place-items: center; font-size: 12px; color: var(--muted);
+      transition: transform .2s; flex: 0 0 auto;
+    }
+    .div-acc-trigger.open .div-acc-chevron { transform: rotate(180deg); background: var(--bim); color: #fff; border-color: var(--bim); }
+    .div-acc-body { display: none; padding: 0 0 12px; }
+    .div-acc-body.open { display: block; }
+    .div-pos-list { display: flex; flex-direction: column; gap: 0; }
+    .div-pos-row {
+      display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start;
+      padding: 12px 18px; border-top: 1px solid var(--line);
+    }
+    .div-pos-row:hover { background: #FBFAF7; }
+    .div-pos-main b { font-size: 13px; display: block; margin-bottom: 4px; }
+    .div-pos-main span { font-size: 12px; color: var(--muted); display: block; }
+    .div-pos-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .div-pos-tags { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+
+    .vtty-filters-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+
+    /* ============ TAB CHÂN DUNG ============ */
+    .core-cards-grid {
+      display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 12px; margin-bottom: 22px;
+    }
+    .core-card {
+      border-radius: 18px; overflow: hidden; border: 1.5px solid rgba(0,102,71,.18);
+      background: linear-gradient(180deg, #fff 0%, #F8FBF9 100%);
+      box-shadow: 0 6px 20px rgba(0,72,51,.07);
+    }
+    .core-card-top {
+      background: linear-gradient(135deg, var(--bim) 0%, var(--bim-3) 100%);
+      color: #fff; padding: 14px 16px;
+    }
+    .core-card-seq { font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.55); margin-bottom: 4px; }
+    .core-card-value { font-size: 13px; font-weight: 900; color: var(--gold-2); margin-bottom: 6px; }
+    .core-card-name { font-size: 13.5px; font-weight: 800; line-height: 1.35; }
+    .core-card-name .en { display: block; font-size: 11px; font-weight: 600; color: rgba(255,255,255,.65); margin-top: 3px; }
+    .core-card-body { padding: 14px 16px; }
+    .core-card-body p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.65; }
+    .core-gate-label {
+      display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px;
+      background: #FFF0D5; border: 1px solid #E7C472; color: #8D5D00;
+      border-radius: 999px; padding: 8px 14px; font-size: 12px; font-weight: 900;
+    }
+
+    /* ============ FACTOR LAYOUT ============ */
+    .factor-layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:18px}
+    .factor-nav{display:flex;flex-direction:column;gap:10px}
+    .factor-btn{border:1px solid var(--line);background:#fff;border-radius:18px;padding:15px;text-align:left;cursor:pointer;transition:.18s}
+    .factor-btn:hover,.factor-btn.active{background:var(--ink);color:#fff;border-color:var(--ink);transform:translateX(2px)}
+    
+    /* Thiết kế ô nền nổi bật cho phần trăm trọng số ở trạng thái thường */
+    .factor-btn span{
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #7A5600;
+      background: #FFF4CE;
+      border: 1px solid #E5C66E;
+      border-radius: 8px;
+      padding: 4px 10px;
+      margin-bottom: 8px;
+    }
+    /* Tự động đổi màu ô nền trọng số khi nút đó được chọn (Active) để đảm bảo độ tương phản trên nền tối */
+    .factor-btn.active span{
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--gold-2);
+      border-color: rgba(216, 191, 122, 0.4);
+    }
+    
+    .factor-btn b{display:block;font-size:14px;line-height:1.35;margin-top:2px}
+    .factor-panel{border:1px solid var(--line);border-radius:22px;background:#fff;overflow:hidden}
+    .factor-main{padding:22px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fff,#FBFAF6)}
+    .factor-main h3{margin:0 0 10px;font-size:22px;letter-spacing:-.8px}
+    .factor-main p{font-size:13.5px;color:var(--muted);line-height:1.7;margin:0}
+    .levels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:18px}
+    .level-card{border:1px solid var(--line);border-radius:18px;padding:16px;background:#fff}
+    .level-card .level-k{font-size:10px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+    .level-card h4{font-size:13px;margin:0 0 8px;line-height:1.4}
+    .level-card p{font-size:12.5px;color:var(--muted);line-height:1.65;margin:0;white-space:pre-line}
+    .comp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .comp{border:1px solid var(--line);background:#fff;border-radius:20px;padding:17px;min-height:190px}
+    .comp .num{color:var(--gold);font-weight:900;font-size:12px;margin-bottom:8px}
+    .comp h3{font-size:15px;line-height:1.35;margin:0 0 9px;letter-spacing:-.25px}
+    .comp p{font-size:12.5px;line-height:1.65;color:var(--muted);margin:0}
+
+    /* ============ PHỄU SVG-BASED CHUẨN ============ */
+    .funnel-global-purpose {
+      background: linear-gradient(135deg, #052219 0%, #093325 100%);
+      border: 1px solid rgba(216,191,122,0.3);
+      border-radius: 18px;
+      padding: 18px 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .fgp-card {
+      display: grid;
+      grid-template-columns: 200px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .fgp-card .label {
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--gold-2);
+      border-right: 2px solid var(--gold);
+      line-height: 1.5;
+      margin: 0;
+      padding-top: 2px;
+    }
+    .fgp-card .content {
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.95);
+      margin: 0;
+    }
+
+    .funnel-layout-container {
+      display: grid;
+      grid-template-columns: 365px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+    .vertical-funnel-wrapper {
+      background: rgba(255,255,255,.75);
+      border: 1px solid var(--line-dark);
+      border-radius: 24px;
+      padding: 28px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(10px);
+    }
+    .funnel-tier {
+      width: 100%;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .funnel-tier svg { display: block; width: 100%; filter: drop-shadow(0 6px 18px rgba(0,50,20,0.18)) drop-shadow(0 2px 5px rgba(0,25,8,0.10)); }
+    .funnel-tier:hover { transform: translateY(-3px); filter: brightness(1.06); }
+    .funnel-tier.active-tier {
+      filter: brightness(1.07) drop-shadow(0 14px 32px rgba(0,80,30,0.30)) drop-shadow(0 4px 10px rgba(0,40,15,0.18));
+      transform: scale(1.03);
+      z-index: 5;
+    }
+    .funnel-pipe-line {
+      width: 6px; height: 20px;
+      background: linear-gradient(180deg, rgba(0,108,50,0.45), rgba(0,160,80,0.20));
+      margin: 0 auto;
+    }
+    .tier-svg-title {
+      font-size: 15px; font-weight: 800; fill: #fff;
+      dominant-baseline: middle; text-anchor: middle;
+      font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+    }
+    .tier-svg-sub {
+      font-size: 11.5px; font-weight: 600; fill: rgba(255,255,255,0.9);
+      dominant-baseline: middle; text-anchor: middle;
+      font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+      letter-spacing: 0.3px;
+    }
+    .funnel-detail-panel {
+      background: #fff;
+      border: 1px solid var(--line-dark);
+      border-radius: 20px;
+      min-height: 480px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      animation: fade .2s ease;
+    }
+    .ac-detail-head {
+      display: flex; align-items: center; gap: 16px; padding: 18px 22px;
+      background: linear-gradient(135deg, #09241C, #0B3326); color: #fff;
+    }
+    .ac-detail-icon {
+      width: 52px; height: 52px; border-radius: 16px;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.18);
+      display: grid; place-items: center; font-size: 24px; flex: 0 0 auto;
+    }
+    .ac-detail-head h3 { margin: 0; font-size: 17px; letter-spacing: -.5px; }
+    .ac-detail-head p { margin: 5px 0 0; font-size: 12.5px; color: rgba(255,255,255,.7); }
+    .ac-detail-body { padding: 22px; }
+    
+    .ac-detail-meta { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 10px; 
+      margin-bottom: 20px; 
+    }
+    .ac-meta-card { 
+      display: grid; 
+      grid-template-columns: 190px minmax(0, 1fr); 
+      gap: 18px; 
+      align-items: start; 
+      border: 1px solid var(--line); 
+      border-radius: 14px; 
+      padding: 15px 18px; 
+      background: #fff; 
+    }
+    .ac-meta-card .label { 
+      font-size: 11px; 
+      font-weight: 900; 
+      letter-spacing: 1px; 
+      text-transform: uppercase; 
+      color: var(--bim-2); 
+      margin-bottom: 0; 
+      padding-top: 2px;
+      border-right: 2px solid var(--gold);
+      line-height: 1.45;
+    }
+    .ac-meta-card p { 
+      margin: 0; 
+      font-size: 13px; 
+      line-height: 1.62; 
+      color: var(--ink); 
+    }
+
+    .ac-steps-list { display: flex; flex-direction: column; gap: 14px; }
+    .ac-step-item {
+      display: flex; gap: 16px; padding: 16px; border: 1px solid var(--line);
+      border-radius: 16px; background: #fff;
+    }
+    .ac-step-num {
+      width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, var(--bim), var(--bim-3));
+      color: #fff; display: grid; place-items: center; font-weight: 900; font-size: 14px;
+      flex: 0 0 auto;
+    }
+    .ac-step-content { flex: 1; min-width: 0; }
+    .ac-step-content .phase-label { font-size: 10.5px; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+    .ac-step-content h4 { margin: 0 0 8px; font-size: 15px; letter-spacing: -.3px; }
+    .ac-step-content p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.65; white-space: pre-line; }
+    .ac-step-footer { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+    .ac-step-footer span { font-size: 11px; font-weight: 800; border: 1px solid var(--line); background: #FBFAF7; border-radius: 999px; padding: 5px 9px; color: #53645E; }
+    .ac-deadline-badge { background: linear-gradient(135deg, var(--gold-soft), #fff); border: 1px solid var(--gold); color: var(--amber); font-weight: 900 !important; }
+
+    .empty{padding:26px;text-align:center;color:var(--muted)}
+    @media (max-width:1240px){
+      .core-cards-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .factor-layout,.levels{grid-template-columns:1fr}
+      .comp-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .ac-meta-card, .fgp-card { grid-template-columns: 1fr; gap: 6px; }
+      .ac-meta-card .label, .fgp-card .label { border-right: none; border-bottom: 2px solid var(--gold); padding-bottom: 4px; display: inline-block; }
+      .funnel-layout-container { grid-template-columns: 1fr; }
+    }
+    @media (max-width:860px){
+      body{overflow:auto}
+      .app{grid-template-columns:1fr;height:auto}
+      .sidebar{position:relative;min-height:auto;padding:18px}
+      .nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+      .side-footer{position:relative;left:auto;right:auto;bottom:auto;margin-top:18px}
+      .main{height:auto;overflow:visible;padding:20px}
+      .topbar{align-items:flex-start;flex-direction:column}
+      .core-cards-grid,.comp-grid{grid-template-columns:1fr}
+      .changs-timeline{flex-wrap:wrap}
+      .changs-timeline:before{display:none}
+      .chang-node{flex:0 0 120px}
+      .filter-input{min-width:100%;width:100%}
+      .table-wrap{max-height:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo"><strong>BIM</strong><span>Group</span></div>
+        <div class="gold-line"></div>
+        <div class="brand-kicker">Succession planning dashboard</div>
+        <div class="brand-title">BIM Future Leaders 2026</div>
+      </div>
+      <nav class="nav" aria-label="Main navigation">
+        <div class="nav-label">Dashboard</div>
+        <button class="active" data-page="vtty"><span class="num">01</span><span class="copy"><b>Vị trí trọng yếu</b><span>Chặng 1</span></span></button>
+        <button data-page="portrait"><span class="num">02</span><span class="copy"><b>Khung chân dung</b><span>Chặng 2</span></span></button>
+      </nav>
+      <div class="side-footer">Cập nhật: <b id="sideDate"></b><br>Ngày báo cáo: <b>02/07/2026</b></div>
+    </aside>
+
+    <main class="main">
+
+      <!-- ============ TAB 1: VTTY ============ -->
+      <section id="page-vtty" class="page active">
+        <div class="topbar">
+          <div>
+            <div class="eyebrow">Critical positions portfolio</div>
+            <h1>Danh sách <em>Vị trí trọng yếu</em></h1>
+            <div class="subtitle">Bấm vào tên khối/ngành để mở rộng danh sách vị trí.</div>
+          </div>
+          <div class="asof"><span>Tổng VTTY</span><b>29</b></div>
+        </div>
+        <div class="section">
+          <div class="section-head">
+            <div><div class="section-title">Bộ lọc</div><div class="section-sub">Tìm nhanh theo vị trí, nhân sự, đơn vị</div></div>
+          </div>
+          <div class="section-body" style="padding-bottom:12px">
+            <div class="vtty-filters-bar">
+              <input class="filter-input" id="vttySearch" placeholder="Tìm kiếm: vị trí, nhân sự, đơn vị..." style="border-radius:14px" />
+              <button class="filter-btn" id="resetVtty">Reset</button>
+            </div>
+          </div>
+        </div>
+        <div class="division-accordion" id="divisionAccordion"></div>
+      </section>
+
+      <!-- ============ TAB 3: KHUNG CHÂN DUNG ============ -->
+      <section id="page-portrait" class="page">
+        <div class="topbar">
+          <div>
+            <div class="eyebrow">Competency architecture</div>
+            <h1>Khung <em>Chân dung kế nhiệm</em></h1>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-head" style="background:#004833; color:#FFFFFF; border-bottom:1px solid #003626;">
+            <div>
+              <div class="section-title" style="color:#FFFFFF;">Điều kiện cần – Năng lực cốt lõi</div>
+              <div class="section-sub" style="color:rgba(255,255,255,0.8);">PHẢI ĐẠT ĐỦ 5 NĂNG LỰC NÀY</div>
+            </div>
+          </div>
+          <div class="section-body">
+            <div class="core-gate-label">Chưa đáp ứng điều kiện cần — Dừng xét duyệt tại đây</div>
+            <div class="core-cards-grid" id="coreCardsGrid"></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-head">
+            <div><div class="section-title">4 nhóm yếu tố đánh giá</div><div class="section-sub">Bấm từng nhóm để xem định nghĩa và 4 mức hành vi</div></div>
+          </div>
+          <div class="section-body">
+            <div class="factor-layout">
+              <div class="factor-nav" id="factorNav"></div>
+              <div class="factor-panel" id="factorPanel"></div>
+            </div>
+          </div>
+        </div>
+        <div class="section" id="leadershipSection" style="display:none">
+          <div class="section-head">
+            <div><div class="section-title">Hệ năng lực lãnh đạo</div><div class="section-sub">7 năng lực thuộc nhóm Năng lực lãnh đạo (trọng số 35%)</div></div>
+          </div>
+          <div class="section-body">
+            <div class="comp-grid" id="leadershipGrid"></div>
+          </div>
+        </div>
+      </section>
+
+
+    </main>
+  </div>
+
+<script>
+const DATA = {
+  vttyByDivision: [
+    { division:"Khối xây dựng", count:2, items:[
+      {stt:1, region:"Hà Nội", unit:"Ban kiểm soát thiết kế", position:"Giám đốc Kiểm soát Thiết kế", incumbent:"Nguyễn Bá Hùng", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"},
+      {stt:2, region:"Phú Quốc", unit:"–", position:"Trưởng ban Quản lý dự án", incumbent:"Nguyễn Mai Ngọc Long", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"}
+    ]},
+    { division:"Hùng Thắng", count:1, items:[
+      {stt:3, region:"Hà Nội", unit:"Xây dựng Hùng Thắng", position:"Phó Giám đốc phụ trách thi công", incumbent:"Bùi Viết Sâm", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"}
+    ]},
+    { division:"Khối TMBĐS", count:5, items:[
+      {stt:4, region:"Hà Nội", unit:"Trung tâm RnD", position:"Trưởng phòng Nghiên cứu chiến lược", incumbent:"Ngụy Thị Hải Hà", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"},
+      {stt:5, region:"Hà Nội", unit:"Ban Kinh doanh", position:"Giám đốc Ban Kinh doanh", incumbent:"Nguyễn Thị Hồng Nhung", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"},
+      {stt:6, region:"Hà Nội", unit:"Ban Kinh doanh", position:"Giám đốc kinh doanh khu vực", incumbent:"(1) Nguyễn Trọng Nhân\n(2) Trần Thị Thanh Nhàn", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"},
+      {stt:7, region:"Hà Nội", unit:"Ban Kinh doanh", position:"Trưởng phòng Hợp tác kinh doanh và Cho thuê", incumbent:"Nguyễn Lê Phương Thanh", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"},
+      {stt:8, region:"Hà Nội", unit:"Ban Dịch vụ khách hàng", position:"Trưởng phòng Bàn giao", incumbent:"Nguyễn Tuấn Anh", criticality:"Cấp 1/ Priority 1", bns:"Ưu tiên", bod:"Phê duyệt"}
+    ]},
+    { division:"Khối Khách sạn & TMDV", count:3, items:[
+      {stt:9,  region:"Hà Nội", unit:"Phòng Tài chính & hỗ trợ vận hành", position:"Giám đốc Tài chính và hỗ trợ Vận hành", incumbent:"Trần Hồng Hạnh", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"},
+      {stt:10, region:"Hà Nội", unit:"–", position:"Giám đốc quản lý nhân sự", incumbent:"Bùi Thị Thu Phương", criticality:"Cấp 3/ Priority 3", bns:"Ưu tiên", bod:"Phê duyệt"},
+      {stt:11, region:"Hà Nội", unit:"Phòng Doanh thu", position:"Giám Đốc Doanh thu", incumbent:"Phạm Hoàng Hà", criticality:"Cấp 3/ Priority 3", bns:"Ưu tiên", bod:"Phê duyệt"}
+    ]},
+    { division:"Ngành Năng lượng", count:1, items:[
+      {stt:12, region:"Hà Nội", unit:"Ban Xây dựng Năng lượng", position:"Trưởng ban Xây dựng Năng lượng", incumbent:"Nguyễn Hậu Hữu", criticality:"Cấp 1/ Priority 1", bns:"Ưu tiên", bod:"Phê duyệt"}
+    ]},
+    { division:"Công ty Quản lý Bất động sản BIM", count:3, items:[
+      {stt:13, region:"Hà Nội", unit:"–", position:"Giám đốc Quản lý vận hành", incumbent:"Trần Trung Hiếu", criticality:"Cấp 1/ Priority 1", bns:"Ưu tiên", bod:"Phê duyệt"},
+      {stt:14, region:"Hà Nội", unit:"Các Khu Đô thị", position:"Giám đốc Ban Quản lý", incumbent:"(1) Trịnh Việt Dũng\n(2) Vũ Thị Như", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"},
+      {stt:15, region:"Hà Nội", unit:"–", position:"Kỹ sư trưởng", incumbent:"Phan Thanh Hùng", criticality:"Cấp 2/ Priority 2", bns:"BNS đề xuất chưa đưa vào kế nhiệm vì:\n– Nhân sự đương nhiệm mới gia nhập tập đoàn 06 tháng => Cần ưu tiên ổn định nhân sự đương nhiệm\n– Vị trí thuộc band 6 => chưa thuộc phạm vi chương trình", bod:"Cân nhắc"}
+    ]},
+    { division:"Elite Fitness", count:1, items:[
+      {stt:16, region:"Hà Nội", unit:"–", position:"Phó Giám đốc Vận hành", incumbent:"Nguyễn Văn Quý", criticality:"Cấp 3/ Priority 3", bns:"Ưu tiên", bod:"Phê duyệt"}
+    ]},
+    { division:"Ban Pháp chế", count:1, items:[
+      {stt:17, region:"Hà Nội", unit:"–", position:"Trưởng phòng Pháp lý", incumbent:"(1) Đinh Thị Kim Ngân\n(2) Nguyễn Hồng Hà", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"}
+    ]},
+    { division:"Ban Đầu tư", count:1, items:[
+      {stt:18, region:"Hà Nội", unit:"Phòng Quản trị đầu tư", position:"Trưởng phòng Đầu tư", incumbent:"Lê Bình Sơn", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"}
+    ]},
+    { division:"Ban Marcom", count:2, items:[
+      {stt:19, region:"Hà Nội", unit:"Phòng MKT BĐS", position:"Trưởng phòng MKT BĐS", incumbent:"Vũ Thị Thu Trang", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"},
+      {stt:20, region:"Hà Nội", unit:"Phòng quản lý sự kiện và vận hành", position:"Trưởng phòng Quản lý Sự kiện và Vận hành", incumbent:"Nguyễn Thị Nhung", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"}
+    ]},
+    { division:"Ban Tài chính - Kế toán", count:3, items:[
+      {stt:21, region:"Hà Nội", unit:"Mảng Tài chính", position:"Phó ban Tài chính", incumbent:"(1) Trần Thị Hồng Vân\n(2) Hoàng Thu Trang", criticality:"–", bns:"Ưu tiên", bod:"Phê duyệt"},
+      {stt:22, region:"Hà Nội", unit:"Mảng Kế toán", position:"Trưởng Ban Kế Toán", incumbent:"Nguyễn Hải Hà", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"},
+      {stt:23, region:"Hà Nội", unit:"Mảng Kế toán", position:"Trưởng Phòng Kế toán vận hành", incumbent:"(1) Nguyễn Trọng Huyên\n(2) Bùi Thị Tuyết Nhung", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"}
+    ]},
+    { division:"Ban Kiểm soát nội bộ", count:1, items:[
+      {stt:24, region:"Hà Nội", unit:"–", position:"Trưởng phòng kiểm soát nội bộ", incumbent:"Lê Tiến Lưu", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"}
+    ]},
+    { division:"Ban PTDA", count:1, items:[
+      {stt:25, region:"Hà Nội", unit:"–", position:"Phó Ban PTDA", incumbent:"Nguyễn Đức Trung", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"}
+    ]},
+    { division:"Ban Nhân sự", count:1, items:[
+      {stt:26, region:"Hà Nội", unit:"Phòng Đào tạo", position:"Trưởng phòng Đào tạo và Gắn kết", incumbent:"Tạ Thị Nhung", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"}
+    ]},
+    { division:"Truyền thông đối ngoại", count:1, items:[
+      {stt:27, region:"Hà Nội", unit:"–", position:"Giám đốc Truyền thông đối ngoại", incumbent:"Phạm Thị Lý", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"}
+    ]},
+    { division:"Chi nhánh Quảng Ninh", count:2, items:[
+      {stt:28, region:"Quảng Ninh", unit:"–", position:"Trưởng phòng Hành chính Nhân sự Miền", incumbent:"(1) Nguyễn Tiến Hữu\n(2) Đỗ Khắc Hoàng Thạch", criticality:"–", bns:"Ưu tiên", bod:"Phê duyệt"},
+      {stt:29, region:"Quảng Ninh", unit:"–", position:"Phó phòng Thủ tục pháp lý", incumbent:"Hà Quang", criticality:"–", bns:"Hiện chưa có vị trí Trưởng phòng Thủ tục pháp lý\n– Nhân sự đương nhiệm sẽ được đưa vào chương trình phát triển lên vị trí Trưởng phòng.", bod:"Cân nhắc"}
+    ]}
+  ],
+  core: [
+    {value:"Chính trực", name:"Chính trực và tuân thủ", en:"Integrity & Ethics", definition:"Khả năng hành xử trung thực, minh bạch và nhất quán giữa cam kết, hành động và kết quả; tuân thủ các nguyên tắc, quy định và chuẩn mực nghề nghiệp ngay cả khi không có giám sát. Đồng thời đề cao giá trị thực chất, không chạy theo hình thức và không đánh đổi nguyên tắc vì lợi ích ngắn hạn hoặc hình thức bề ngoài."},
+    {value:"Hiệu quả", name:"Hướng đến kết quả và trách nhiệm", en:"Result Orientation & Ownership", definition:"Khả năng tập trung vào mục tiêu và kết quả công việc; chủ động hành động, kiên trì theo đuổi cam kết đến cùng, đồng thời chịu trách nhiệm đối với kết quả của bản thân và đội ngũ. Thực hiện công việc một cách cẩn trọng, có chất lượng và duy trì hiệu quả thực thi ngay cả trong điều kiện áp lực hoặc khó khăn để đảm bảo hoàn thành các mục tiêu đã cam kết."},
+    {value:"Tri thức", name:"Học hỏi và thích ứng", en:"Learning Agility & Adaptability", definition:"Khả năng chủ động học hỏi từ trải nghiệm, phản hồi và các tình huống mới; nhanh chóng thích nghi với thay đổi và linh hoạt điều chỉnh cách tiếp cận nhằm duy trì hiệu quả công việc và đáp ứng yêu cầu phát triển trong môi trường luôn biến động."},
+    {value:"Sáng tạo", name:"Đổi mới sáng tạo", en:"Innovation", definition:"Khả năng chủ động tìm kiếm, đề xuất và áp dụng các ý tưởng, phương pháp hoặc cách tiếp cận mới nhằm nâng cao hiệu quả, tạo giá trị và giải quyết các thách thức của tổ chức; đồng thời thúc đẩy tư duy đổi mới và cải tiến liên tục trong công việc."},
+    {value:"-", name:"Nhân văn và tôn trọng con người", en:"Human-Centered Leadership", definition:"Khả năng đặt con người làm trung tâm trong quá trình lãnh đạo, ra quyết định và triển khai công việc; thấu hiểu, tôn trọng, đối xử công bằng và hành xử có trách nhiệm với người khác. Biết cân bằng giữa mục tiêu kinh doanh và giá trị con người, đồng thời tạo môi trường làm việc tích cực, phát triển và gắn kết, nơi mỗi cá nhân được lắng nghe, ghi nhận, phát huy năng lực và cùng đóng góp vào sự phát triển bền vững của tổ chức, khách hàng và cộng đồng."}
+  ],
+  factors: [
+    {name:"Hiệu suất\nPerformance", weight:25, definition:"Là mức độ hoàn thành và tạo ra kết quả công việc trong vai trò hiện tại thông qua chất lượng thực thi, khả năng đạt mục tiêu và giá trị đóng góp đối với BIM Group.", levels:["CHƯA ĐÁP ỨNG KÝ VỌNG\n\nKết quả công việc chưa ổn định, thường không đạt hoặc chỉ đạt một phần yêu cầu của vai trò hiện tại; cần nhiều hướng dẫn hoặc hỗ trợ để hoàn thành công việc","ĐÁP ỨNG KÝ VỌNG\n\nHoàn thành đầy đủ các mục tiêu và yêu cầu chính của vai trò hiện tại với chất lượng và tiến độ phù hợp","VƯỢT KỲ VỌNG\n\nĐạt kết quả cao hơn yêu cầu của vai trò hiện tại; chủ động cải thiện hiệu quả công việc và tạo ra giá trị tích cực cho đơn vị hoặc tổ chức","HIỆU SUẤT NỔI BẬT\n\nĐạt kết quả vượt trội và tạo ra tác động tích cực rõ rệt vượt phạm vi công việc hoặc đơn vị phụ trách; đóng góp giá trị nổi bật cho đơn vị hoặc tổ chức"]},
+    {name:"Tiềm năng\nPotential", weight:20, definition:"Là khả năng học hỏi, thích nghi và phát triển nhanh để có thể đảm nhận hiệu quả các vai trò có mức độ trách nhiệm hoặc độ phức tạp cao hơn trong tương lai; được thể hiện qua tư duy xử lý vấn đề, sự cởi mở với cái mới, khả năng phối hợp và tạo ảnh hưởng với người khác, cùng động lực phát triển liên tục.", levels:["TIỀM NĂNG Ở MỨC CƠ BẢN\n\nBiểu hiện hành vi thường gặp:\n– Tiếp thu kiến thức hoặc cách làm mới khi có hướng dẫn cụ thể;\n– Thích nghi với thay đổi quen thuộc trong phạm vi công việc hiện tại;\n– Giải quyết vấn đề chủ yếu dựa trên quy trình hoặc kinh nghiệm sẵn có;\n– Hợp tác với người khác khi có yêu cầu;\n– Chủ yếu tập trung hoàn thành công việc hiện tại;\n– Chưa thể hiện rõ mong muốn phát triển hoặc thử thách bản thân.","CÓ KHẢ NĂNG PHÁT TRIỂN\n\nBiểu hiện hành vi thường gặp:\n– Chủ động học hỏi kiến thức, kỹ năng hoặc cách làm mới;\n– Thích nghi tương đối nhanh khi có thay đổi về công việc hoặc yêu cầu;\n– Biết phân tích và xử lý các vấn đề quen thuộc theo nhiều cách khác nhau;\n– Sẵn sàng thử cách làm mới để cải thiện hiệu quả công việc;\n– Chủ động phối hợp với người khác để hoàn thành mục tiêu chung;\n– Sẵn sàng nhận thêm nhiệm vụ hoặc trải nghiệm mới để phát triển.","TIỀM NĂNG CAO\n\nBiểu hiện hành vi thường gặp:\n– Học nhanh từ trải nghiệm và có thể áp dụng hiệu quả vào tình huống mới;\n– Thích nghi tốt khi môi trường, yêu cầu hoặc phạm vi công việc thay đổi;\n– Có khả năng nhìn nhận vấn đề từ nhiều góc độ và xác định được vấn đề cốt lõi;\n– Chủ động đề xuất cải tiến hoặc cách tiếp cận mới để nâng cao hiệu quả;\n– Dễ tạo sự hợp tác và phối hợp hiệu quả với nhiều đối tượng khác nhau;\n– Chủ động tìm kiếm cơ hội phát triển và sẵn sàng nhận trách nhiệm lớn hơn.","TIỀM NĂNG NỔI TRỘI\n\nBiểu hiện hành vi thường gặp:\n– Thích nghi nhanh và duy trì hiệu quả trong các tình huống mới, phức tạp hoặc thay đổi liên tục;\n– Có khả năng xử lý các vấn đề chưa có tiền lệ hoặc có nhiều yếu tố tác động;\n– Chủ động thúc đẩy cải tiến hoặc thử nghiệm các cách tiếp cận mới tạo giá trị cho tổ chức;\n– Có khả năng kết nối và phối hợp hiệu quả với nhiều nhóm hoặc cấp độ khác nhau;\n– Liên tục tìm kiếm cơ hội học hỏi và mở rộng phạm vi năng lực của bản thân;\n– Sẵn sàng đảm nhận các nhiệm vụ hoặc vai trò có mức độ trách nhiệm và phạm vi ảnh hưởng lớn hơn."]},
+    {name:"Gắn kết\nCommitment & Aspiration", weight:20, definition:"Là mức độ cá nhân mong muốn gắn bó, phát triển lâu dài và sẵn sàng đảm nhận các vai trò có trách nhiệm hoặc phạm vi ảnh hưởng cao hơn trong tổ chức; được thể hiện qua sự chủ động đồng hành, tinh thần phát triển bản thân và sự phù hợp với văn hóa, giá trị chung.", levels:["ĐÁP ỨNG CƠ BẢN\n\nBiểu hiện hành vi thường gặp:\n– Hoàn thành công việc theo yêu cầu và phạm vi được giao;\n– Tuân thủ quy định, quy trình và chuẩn mực chung của tổ chức;\n– Hợp tác với đồng nghiệp khi cần thiết;\n– Chủ yếu tập trung vào công việc hiện tại;\n– Ít quan tâm hoặc chưa thể hiện rõ mong muốn phát triển thêm trong tổ chức.","GẮN KẾT VÀ SẴN SÀNG ĐÓNG GÓP\n\nBiểu hiện hành vi thường gặp:\n– Chủ động phối hợp để hỗ trợ mục tiêu chung của đội nhóm hoặc đơn vị;\n– Có ý thức cải thiện hiệu quả công việc và phát triển bản thân;\n– Sẵn sàng nhận thêm nhiệm vụ hoặc trải nghiệm mới khi được giao;\n– Thể hiện sự phù hợp với văn hóa và cách làm việc của tổ chức;\n– Có mong muốn tiếp tục phát triển trong tổ chức.","CAM KẾT PHÁT TRIỂN DÀI HẠN\n\nBiểu hiện hành vi thường gặp:\n– Chủ động tìm kiếm cơ hội học hỏi hoặc thử thách để chuẩn bị cho vai trò lớn hơn;\n– Sẵn sàng nhận trách nhiệm hoặc phạm vi công việc rộng hơn;\n– Duy trì cam kết và trách nhiệm ngay cả trong giai đoạn áp lực hoặc thay đổi;\n– Quan tâm đến mục tiêu chung của tổ chức thay vì chỉ phạm vi cá nhân;\n– Thể hiện mong muốn gắn bó và phát triển nghề nghiệp lâu dài trong tổ chức.","CAM KẾT VÀ SẴN SÀNG ĐỒNG HÀNH Ở PHẠM VI LỚN HƠN\n\nBiểu hiện hành vi thường gặp:\n– Chủ động nhận các nhiệm vụ hoặc mục tiêu có tác động lớn hơn ngoài phạm vi công việc hiện tại;\n– Sẵn sàng đảm nhận vai trò hoặc trách nhiệm cao hơn khi tổ chức cần;\n– Kiên định theo đuổi mục tiêu và duy trì cam kết trong các giai đoạn thay đổi hoặc khó khăn;\n– Ưu tiên lợi ích và mục tiêu chung của tổ chức trong cách hành động và ra quyết định;\n– Thể hiện mong muốn đóng góp và phát triển lâu dài cùng tổ chức ở phạm vi rộng hơn."]},
+    {name:"Năng lực lãnh đạo\nLeadership Competency", weight:35, definition:"Là tập hợp các năng lực giúp cá nhân lãnh đạo bản thân, đội ngũ và tổ chức nhằm đạt được mục tiêu chung; đồng thời thể hiện khả năng đáp ứng vai trò kế nhiệm có mức độ trách nhiệm hoặc phạm vi ảnh hưởng cao hơn trong tổ chức.", levels:["HIỆU QUẢ THẤP, CẦN RÈN LUYỆN\n\nBiểu hiện hành vi thường gặp:\n– Thực hiện công việc còn sai sót hoặc chưa ổn định.\n– Vận dụng năng lực còn hạn chế và phụ thuộc nhiều vào hướng dẫn.\n– Gặp khó khăn khi xử lý tình huống mới hoặc yêu cầu phức tạp hơn.\n– Ảnh hưởng chủ yếu trong phạm vi cá nhân.","HIỆU QUẢ\n\nBiểu hiện hành vi thường gặp:\n– Đáp ứng được yêu cầu công việc trong các tình huống quen thuộc.\n– Vận dụng năng lực theo quy trình hoặc hướng dẫn có sẵn.\n– Có thể làm việc độc lập ở mức cơ bản nhưng đôi khi vẫn cần hỗ trợ.\n– Ảnh hưởng chủ yếu trong phạm vi nhóm hoặc bộ phận.","HIỆU QUẢ CAO / TINH THÔNG\n\nBiểu hiện hành vi thường gặp:\n– Vận dụng năng lực hiệu quả và linh hoạt trong nhiều tình huống.\n– Chủ động giải quyết các vấn đề có độ phức tạp cao hơn thông thường.\n– Có khả năng hỗ trợ, hướng dẫn hoặc phối hợp hiệu quả với người khác để đạt kết quả chung.\n– Tạo ra kết quả tích cực cho đơn vị hoặc nhiều bên liên quan.","HIỆU QUẢ RẤT CAO / CHUYÊN NGHIỆP\n\nBiểu hiện hành vi thường gặp:\n– Vận dụng năng lực ở mức thành thạo và ổn định trong nhiều bối cảnh khác nhau.\n– Chủ động dẫn dắt, định hướng hoặc tạo ảnh hưởng tích cực đến đội nhóm/người khác.\n– Nhìn nhận vấn đề ở góc độ tổng thể và cân nhắc tác động dài hạn.\n– Đưa ra quyết định hoặc giải pháp có giá trị đối với tổ chức."]}
+  ],
+  leadership: [
+    {name:"Tư duy và định hướng chiến lược\nStrategic Thinking & Direction", definition:"Khả năng nhìn nhận xuyên suốt xu hướng, cơ hội, thách thức và các thay đổi có thể tác động đến tổ chức trong ngắn hạn, trung hạn và dài hạn; từ đó xác định định hướng phát triển phù hợp, đưa ra các lựa chọn chiến lược, chủ động dẫn dắt thay đổi và dám theo đuổi các hướng đi mới nhằm tạo lợi thế cạnh tranh và giá trị bền vững cho tổ chức."},
+    {name:"Tư duy hệ thống\nSystems Thinking", definition:"Khả năng nhìn nhận tổ chức, dự án hoặc vấn đề dưới góc độ tổng thể; hiểu được mối liên hệ, sự phụ thuộc và tác động qua lại giữa các thành phần trong hệ thống. Từ đó nhận diện nguyên nhân cốt lõi, dự báo các tác động dây chuyền và đưa ra các quyết định hoặc giải pháp tối ưu cho toàn hệ thống thay vì chỉ giải quyết các vấn đề riêng lẻ."},
+    {name:"Phân tích và ra quyết định\nAnalysis & Decision Making", definition:"Khả năng thu thập, phân tích và đánh giá thông tin từ nhiều góc độ để xác định đúng bản chất vấn đề, nguyên nhân và mức độ tác động; từ đó đưa ra nhận định, quyết định phù hợp và có căn cứ, đồng thời chủ động phản biện và kiểm chứng các giả định nhằm lựa chọn giải pháp tối ưu cho mục tiêu chung của tổ chức."},
+    {name:"Thực thi và triển khai\nExecution & Implementation", definition:"Khả năng chuyển hóa mục tiêu, kế hoạch và định hướng thành các hành động cụ thể; tổ chức và huy động nguồn lực phù hợp, theo dõi tiến độ, xử lý các khó khăn phát sinh và thúc đẩy việc thực hiện nhằm đảm bảo hoàn thành các mục tiêu và cam kết đã đề ra."},
+    {name:"Giao tiếp và tạo ảnh hưởng\nCommunication & Influence", definition:"Khả năng truyền đạt thông tin, ý tưởng một cách rõ ràng, thuyết phục và phù hợp với từng đối tượng; đồng thời tạo ảnh hưởng thông qua uy tín cá nhân, lập luận có căn cứ và hành động nhất quán để xây dựng sự đồng thuận, thúc đẩy hợp tác và truyền cảm hứng cho người khác cùng hướng tới mục tiêu chung của tổ chức."},
+    {name:"Dẫn dắt đội ngũ và phát triển con người\nLeading & Developing People", definition:"Khả năng định hướng, dẫn dắt và phát triển đội ngũ nhằm đạt được mục tiêu chung; thông qua việc phân công phù hợp, huấn luyện, phản hồi, trao quyền và tạo động lực cho nhân viên. Đồng thời xây dựng môi trường làm việc tin cậy, tôn trọng và công bằng để mỗi cá nhân phát huy năng lực và phát triển bền vững."},
+    {name:"Xây dựng mối quan hệ\nRelationship Building", definition:"Khả năng chủ động xây dựng, duy trì và phát triển các mối quan hệ tin cậy với đồng nghiệp, đối tác và các bên liên quan; từ đó tăng cường sự hợp tác, kết nối nguồn lực và hỗ trợ việc thực hiện các mục tiêu chung của tổ chức."}
+  ]
+};
+
+const esc = s => String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+const nl2br = s => esc(s).replace(/\n/g,'<br>');
+const pct = n => `${Number(n||0).toFixed(0)}%`;
+
+function statusClass(s){ return s==='Hoàn thành'?'st-done':s==='Đang triển khai'?'st-run':'st-todo'; }
+function statusPill(s){ return `<span class="status ${statusClass(s)}">${esc(s||'—')}</span>`; }
+
+// ============ NAV ============
+function initNav(){
+  document.querySelectorAll('.nav button').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const page = btn.dataset.page;
+      document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+      document.getElementById(`page-${page}`).classList.add('active');
+    });
+  });
+}
+
+// ============ TAB 2: VTTY ACCORDION ============
+const openDivisions = new Set();
+let vttyQ = '';
+
+function bnsTag(v){
+  const t = String(v||'').trim();
+  if(t.toLowerCase()==='ưu tiên') return `<span class="tag" style="background:#FFF4CE;color:#7A5600;border:1px solid #E5C66E">★ Ưu tiên</span>`;
+  return `<div class="tag-consider" style="max-width:260px">${nl2br(t||'—')}</div>`;
+}
+function bodTag(v){
+  const t = String(v||'').trim();
+  if(t.toLowerCase().includes('phê duyệt')) return `<span class="tag tag-approved">✓ Phê duyệt</span>`;
+  return `<span class="tag st-run">${esc(t||'—')}</span>`;
+}
+
+function renderVttyAccordion(){
+  const q = vttyQ.toLowerCase();
+  const acc = document.getElementById('divisionAccordion');
+  const filtered = DATA.vttyByDivision.map(d=>{
+    const items = d.items.filter(x=>{
+      const hay = [x.position,x.incumbent,x.unit,x.region,d.division].join(' ').toLowerCase();
+      return !q || hay.includes(q);
+    });
+    return {...d, items};
+  }).filter(d=>d.items.length>0);
+
+  acc.innerHTML = filtered.map((d, blockIndex)=>{
+    const isOpen = openDivisions.has(d.division);
+    return `
+    <div class="div-acc-item">
+      <button class="div-acc-trigger ${isOpen?'open':''}" data-div="${esc(d.division)}">
+        <div class="div-acc-num">${blockIndex + 1}</div>
+        <div class="div-acc-info">
+          <b>${esc(d.division)}</b>
+          <span>${d.items.length} vị trí${d.items.length!==d.count?' (đang lọc)':''}</span>
+        </div>
+        <div class="div-acc-chevron">▼</div>
+      </button>
+      <div class="div-acc-body ${isOpen?'open':''}">
+        <div class="div-pos-list">
+          ${d.items.map(x=>`
+            <div class="div-pos-row">
+              <div class="div-pos-main">
+                <b>${esc(x.position)}</b>
+                <span>${esc(x.unit!=='–'&&x.unit?x.unit:'')} ${x.region?'· '+esc(x.region):''}</span>
+                <div class="div-pos-meta">
+                  ${x.incumbent.split('\n').map(n=>`<span style="font-size:12px;background:#F5F2EC;border:1px solid var(--line);border-radius:999px;padding:4px 9px">${esc(n)}</span>`).join('')}
+                </div>
+              </div>
+              <div class="div-pos-tags">
+                ${bodTag(x.bod)}
+                ${x.criticality&&x.criticality!=='–'?`<span style="font-size:11px;color:var(--muted)">${esc(x.criticality)}</span>`:''}
+              </div>
+            </div>
+            ${x.bod==='Cân nhắc'||!x.bns.toLowerCase().includes('ưu tiên')?`<div style="padding:10px 18px;background:#FFFBF0;border-top:1px solid #E7C472;font-size:12px;color:#7A5600;line-height:1.6"><b>Ghi chú BNS:</b> ${nl2br(x.bns)}</div>`:''}
+          `).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  acc.querySelectorAll('.div-acc-trigger').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const div = btn.dataset.div;
+      if(openDivisions.has(div)) openDivisions.delete(div);
+      else openDivisions.add(div);
+      renderVttyAccordion();
+    });
+  });
+}
+
+// ============ TAB 3: KHUNG CHÂN DUNG ============
+let activeFactor = 0;
+function renderPortrait(){
+  document.getElementById('coreCardsGrid').innerHTML = DATA.core.map((c,i)=>`
+    <div class="core-card">
+      <div class="core-card-top">
+        <div class="core-card-seq">Năng lực ${i+1}</div>
+        <div class="core-card-value">${esc(c.value)}</div>
+        <div class="core-card-name">${esc(c.name)}<span class="en">${esc(c.en)}</span></div>
+      </div>
+      <div class="core-card-body"><p>${esc(c.definition)}</p></div>
+    </div>`).join('');
+
+  document.getElementById('factorNav').innerHTML = DATA.factors.map((f,i)=>`
+    <button class="factor-btn ${i===activeFactor?'active':''}" data-i="${i}">
+      <span>${f.weight}% trọng số</span>
+      <b>${nl2br(f.name)}</b>
+    </button>`).join('');
+  document.querySelectorAll('#factorNav .factor-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{activeFactor=Number(btn.dataset.i);renderPortrait();});
+  });
+  renderFactor();
+
+  document.getElementById('leadershipGrid').innerHTML = DATA.leadership.map((c,i)=>{
+    const parts = c.name.split('\n');
+    return `<article class="comp">
+      <div class="num">${String(i+1).padStart(2,'0')}</div>
+      <h3>${esc(parts[0])}<br><span style="font-size:12px;font-weight:600;color:var(--muted)">${esc(parts[1]||'')}</span></h3>
+      <p>${esc(c.definition)}</p>
+    </article>`;
+  }).join('');
+}
+function renderFactor(){
+  const f = DATA.factors[activeFactor];
+  // Chỉ hiển thị bảng 7 hệ năng lực lãnh đạo khi ô "Năng lực lãnh đạo 35%" được chọn (index 3)
+  const leadershipSection = document.getElementById('leadershipSection');
+  if(leadershipSection){
+    leadershipSection.style.display = activeFactor === 3 ? 'block' : 'none';
+  }
+  const lNames = ['Mức 1 – Thấp (<5 Điểm)','Mức 2 – Trung bình (5–7 Điểm)','Mức 3 – Cao (8–9 Điểm)','Mức 4 – Rất cao (10 Điểm)'];
+  const parts = f.name.split('\n');
+  document.getElementById('factorPanel').innerHTML = `
+    <div class="factor-main">
+      <h3>${esc(parts[0])} <span style="color:var(--gold);font-size:16px">/ ${f.weight}%</span></h3>
+      ${parts[1]?`<p style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:8px">${esc(parts[1])}</p>`:''}
+      <p>${esc(f.definition)}</p>
+    </div>
+    <div class="levels">
+      ${f.levels.map((lv,i)=>{
+        const halves = String(lv).split('\n\n');
+        const title = halves[0]||lNames[i];
+        const body = halves.slice(1).join('\n\n')||lv;
+        return `<div class="level-card">
+          <div class="level-k">${lNames[i]}</div>
+          <h4>${esc(title)}</h4>
+          <p>${esc(body)}</p>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+// ============ BOOT ============
+function boot(){
+  document.getElementById('sideDate').textContent = '02/07/2026';
+  initNav();
+
+  document.getElementById('vttySearch').addEventListener('input', e=>{
+    vttyQ = e.target.value.trim();
+    renderVttyAccordion();
+  });
+  document.getElementById('resetVtty').addEventListener('click',()=>{
+    vttyQ=''; document.getElementById('vttySearch').value='';
+    renderVttyAccordion();
+  });
+  renderVttyAccordion();
+
+  renderPortrait();
+}
+document.addEventListener('DOMContentLoaded', boot);
+</script>
+</body>
+</html>
