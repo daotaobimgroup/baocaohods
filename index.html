@@ -46,6 +46,7 @@
       color:var(--ink);
       min-height:100vh;
       overflow:hidden;
+      -webkit-text-size-adjust:100%;
     }
     button,input,select{font:inherit}
     .app{display:grid;grid-template-columns:var(--side) minmax(0,1fr);height:100vh}
@@ -271,10 +272,12 @@
       padding: 12px 18px; border-top: 1px solid var(--line);
     }
     .div-pos-row:hover { background: #FBFAF7; }
+    .div-pos-main { min-width: 0; }
     .div-pos-main b { font-size: 13px; display: block; margin-bottom: 4px; }
     .div-pos-main span { font-size: 12px; color: var(--muted); display: block; }
     .div-pos-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-    .div-pos-tags { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+    .div-pos-tags { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex: 0 0 auto; max-width: 45%; }
+    .div-pos-tags .status, .div-pos-tags .tag { white-space: normal; text-align: right; }
 
     .vtty-filters-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
 
@@ -355,6 +358,7 @@
     .comp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
     #leadershipGrid.comp-grid{display:block}
     .lead-table-wrap{overflow-x:auto;border:1px solid var(--line-dark);border-radius:12px}
+    .scroll-hint{display:none;font-size:11px;font-weight:800;color:var(--muted);margin-bottom:8px}
     .lead-table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:900px}
     .lead-table th,.lead-table td{border:1px solid var(--line-dark);padding:10px 12px;vertical-align:top;text-align:left}
     .lead-table thead tr.lt-title th{background:var(--bim);color:#fff;font-size:13px;font-weight:800;text-align:center;letter-spacing:.3px;padding:11px 12px}
@@ -538,12 +542,13 @@
       .funnel-layout-container { grid-template-columns: 1fr; }
     }
     @media (max-width:860px){
-      body{overflow:auto}
-      .app{grid-template-columns:1fr;height:auto}
+      html{-webkit-text-size-adjust:100%}
+      body{overflow-x:hidden;overflow-y:auto}
+      .app{grid-template-columns:1fr;height:auto;overflow-x:hidden}
       .sidebar{position:relative;min-height:auto;padding:18px}
       .nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
       .side-footer{position:relative;left:auto;right:auto;bottom:auto;margin-top:18px}
-      .main{height:auto;overflow:visible;padding:20px}
+      .main{height:auto;overflow:visible;padding:16px;max-width:100vw}
       .topbar{align-items:flex-start;flex-direction:column}
       .core-cards-grid,.comp-grid{grid-template-columns:1fr}
       .changs-timeline{flex-wrap:wrap}
@@ -551,6 +556,36 @@
       .chang-node{flex:0 0 120px}
       .filter-input{min-width:100%;width:100%}
       .table-wrap{max-height:none}
+
+      /* Không để nội dung/thẻ badge bị cắt mất trên điện thoại */
+      .section-body{padding:16px}
+      .section-head{padding:16px}
+      h1{font-size:24px;letter-spacing:-1px}
+      .subtitle{font-size:13px}
+      .asof{width:100%}
+
+      .div-pos-row{grid-template-columns:1fr;gap:10px}
+      .div-pos-tags{max-width:100%;flex-direction:row;flex-wrap:wrap;align-items:flex-start;justify-content:flex-start}
+      .div-pos-tags .status,.div-pos-tags .tag{text-align:left}
+      .status,.tag{white-space:normal}
+      .tag-consider{max-width:100% !important}
+
+      .lead-table-wrap{-webkit-overflow-scrolling:touch}
+      .scroll-hint{display:block}
+      .core-card-name{font-size:13px}
+    }
+    @media (max-width:480px){
+      .nav{grid-template-columns:1fr}
+      .brand-logo strong{font-size:28px}
+      h1{font-size:21px}
+      .section-body{padding:13px}
+      .div-acc-trigger{padding:13px 14px;gap:10px}
+      .div-pos-row{padding:12px 14px}
+      .core-cards-grid{gap:10px}
+      .levels{grid-template-columns:1fr;padding:12px}
+      .factor-main{padding:16px}
+      .factor-btn{padding:12px}
+      .comp{padding:14px}
     }
   </style>
 </head>
@@ -859,6 +894,7 @@ function renderPortrait(){
   }).join('');
 
   document.getElementById('leadershipGrid').innerHTML = `
+    <div class="scroll-hint">⟷ Vuốt ngang để xem đầy đủ bảng</div>
     <div class="lead-table-wrap">
       <table class="lead-table">
         <thead>
