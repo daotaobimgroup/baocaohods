@@ -241,7 +241,7 @@
     .cdp-table tbody tr:last-child td { border-bottom: 0; }
     .cdp-table tbody tr:hover td { background: #FBFAF7; }
 
-    /* ============ TAB VTTY ============ */
+    /* ============ TAB VT ============ */
     .division-accordion { display: flex; flex-direction: column; gap: 10px; }
     .div-acc-item { border: 1px solid var(--line); border-radius: 18px; background: #fff; overflow: hidden; transition: .18s; }
     .div-acc-trigger {
@@ -279,7 +279,7 @@
     .div-pos-tags { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex: 0 0 auto; max-width: 45%; }
     .div-pos-tags .status, .div-pos-tags .tag { white-space: normal; text-align: right; }
 
-    .vtty-filters-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .VT-filters-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
 
     /* ============ TAB CHÂN DUNG ============ */
     .core-cards-grid {
@@ -600,7 +600,7 @@
       </div>
       <nav class="nav" aria-label="Main navigation">
         <div class="nav-label">Dashboard</div>
-        <button class="active" data-page="vtty"><span class="num">01</span><span class="copy"><b>Vị trí phát triển kế nhiệm</b><span>Chặng 1</span></span></button>
+        <button class="active" data-page="VT"><span class="num">01</span><span class="copy"><b>Vị trí phát triển kế nhiệm</b><span>Chặng 1</span></span></button>
         <button data-page="portrait"><span class="num">02</span><span class="copy"><b>Khung chân dung</b><span>Chặng 2</span></span></button>
       </nav>
       <div class="side-footer">Cập nhật: <b id="sideDate"></b><br>Ngày báo cáo: <b>02/07/2026</b></div>
@@ -608,24 +608,24 @@
 
     <main class="main">
 
-      <!-- ============ TAB 1: VTTY ============ -->
-      <section id="page-vtty" class="page active">
+      <!-- ============ TAB 1: VT ============ -->
+      <section id="page-VT" class="page active">
         <div class="topbar">
           <div>
             <div class="eyebrow">Critical positions portfolio</div>
             <h1>Danh sách <em>Vị trí phát triển kế nhiệm</em></h1>
             <div class="subtitle">Bấm vào tên khối/ngành để mở rộng danh sách vị trí.</div>
           </div>
-          <div class="asof"><span>Tổng VTTY</span><b>29</b></div>
+          <div class="asof"><span>Tổng VT</span><b>29</b></div>
         </div>
         <div class="section">
           <div class="section-head">
             <div><div class="section-title">Bộ lọc</div><div class="section-sub">Tìm nhanh theo vị trí, nhân sự, đơn vị</div></div>
           </div>
           <div class="section-body" style="padding-bottom:12px">
-            <div class="vtty-filters-bar">
-              <input class="filter-input" id="vttySearch" placeholder="Tìm kiếm: vị trí, nhân sự, đơn vị..." style="border-radius:14px" />
-              <button class="filter-btn" id="resetVtty">Reset</button>
+            <div class="VT-filters-bar">
+              <input class="filter-input" id="VTSearch" placeholder="Tìm kiếm: vị trí, nhân sự, đơn vị..." style="border-radius:14px" />
+              <button class="filter-btn" id="resetVT">Reset</button>
             </div>
           </div>
         </div>
@@ -681,7 +681,7 @@
 
 <script>
 const DATA = {
-  vttyByDivision: [
+  VTByDivision: [
     { division:"Khối xây dựng", count:2, items:[
       {stt:1, region:"Hà Nội", unit:"Ban kiểm soát thiết kế", position:"Giám đốc Kiểm soát Thiết kế", incumbent:"Nguyễn Bá Hùng", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"},
       {stt:2, region:"Phú Quốc", unit:"–", position:"Trưởng ban Quản lý dự án", incumbent:"Nguyễn Mai Ngọc Long", criticality:"Cấp 2/ Priority 2", bns:"Ưu tiên", bod:"Phê duyệt"}
@@ -788,9 +788,9 @@ function initNav(){
   });
 }
 
-// ============ TAB 2: VTTY ACCORDION ============
+// ============ TAB 2: VT ACCORDION ============
 const openDivisions = new Set();
-let vttyQ = '';
+let VTQ = '';
 
 function bnsTag(v){
   const t = String(v||'').trim();
@@ -803,10 +803,10 @@ function bodTag(v){
   return `<span class="tag st-run">${esc(t||'—')}</span>`;
 }
 
-function renderVttyAccordion(){
-  const q = vttyQ.toLowerCase();
+function renderVTAccordion(){
+  const q = VTQ.toLowerCase();
   const acc = document.getElementById('divisionAccordion');
-  const filtered = DATA.vttyByDivision.map(d=>{
+  const filtered = DATA.VTByDivision.map(d=>{
     const items = d.items.filter(x=>{
       const hay = [x.position,x.incumbent,x.unit,x.region,d.division].join(' ').toLowerCase();
       return !q || hay.includes(q);
@@ -854,7 +854,7 @@ function renderVttyAccordion(){
       const div = btn.dataset.div;
       if(openDivisions.has(div)) openDivisions.delete(div);
       else openDivisions.add(div);
-      renderVttyAccordion();
+      renderVTAccordion();
     });
   });
 }
@@ -957,15 +957,15 @@ function boot(){
   document.getElementById('sideDate').textContent = '02/07/2026';
   initNav();
 
-  document.getElementById('vttySearch').addEventListener('input', e=>{
-    vttyQ = e.target.value.trim();
-    renderVttyAccordion();
+  document.getElementById('VTSearch').addEventListener('input', e=>{
+    VTQ = e.target.value.trim();
+    renderVTAccordion();
   });
-  document.getElementById('resetVtty').addEventListener('click',()=>{
-    vttyQ=''; document.getElementById('vttySearch').value='';
-    renderVttyAccordion();
+  document.getElementById('resetVT').addEventListener('click',()=>{
+    VTQ=''; document.getElementById('VTSearch').value='';
+    renderVTAccordion();
   });
-  renderVttyAccordion();
+  renderVTAccordion();
 
   renderPortrait();
 }
